@@ -7,36 +7,11 @@ const CATEGORIES = [
   { name: "Hazwan Cooks", color: "#ffc88f" },
 ];
 
-const testData = [
-  {
-    id: 1,
-    title: "Puasa ke-29 : Popia Simpul & Popia Seaweed",
-    source: "https://www.tiktok.com/@khairulaming/video/7223979433693105414?lang=en",
-    thumbnail: "https://p16-sign-va.tiktokcdn.com/tos-maliva-p-0068/562aafd704944d798149d29564f5d882_1681963813~tplv-photomode-zoomcover:480:480.avif?x-expires=1707220800&x-signature=2E%2BAxMewOZtNgjfA2c9iINlZ0bc%3D",
-    author: "Khairul Aming",
-    year: "2023"
-  },
-  {
-    id: 2,
-    title: "Puasa ke-28 : Pulut Kuning",
-    source: "https://www.tiktok.com/@khairulaming/video/7223637038665436422?is_from_webapp=1&sender_device=pc&web_id=6984765835533485570",
-    thumbnail: "https://p16-sign-va.tiktokcdn.com/tos-maliva-p-0068/2de8bc856b3a40e9b2ec9cec13c5994d_1681884091~tplv-photomode-zoomcover:480:480.avif?x-expires=1707220800&x-signature=7FOYfSP82OuM0q68%2FBUgMAVYyEw%3D",
-    author: "Khairul Aming",
-    year: "2023"
-  },
-  {
-    id: 3,
-    title: "Puasa ke-27 : Rendang 1 Ekor Ayam",
-    source: "https://www.tiktok.com/@khairulaming/video/7223249820029390086?lang=en",
-    thumbnail: "https://p16-sign-va.tiktokcdn.com/tos-maliva-p-0068/04f2a41ad59a4365b3320e8d95d3d928_1681793916~tplv-photomode-zoomcover:480:480.avif?x-expires=1707289200&x-signature=42szCULEhWEN90MtxiIrN53T6XU%3D",
-    author: "Khairul Aming",
-    year: "2023"
-  },
-];
-
 function App() {
   const [recipes, setRecipes] = useState([]);
+  const [search, setSearch] = useState("");
 
+  //ToDo: Add Loading.. page during first load
   useEffect(function() {
     async function getRecipes(){
       let { data: resepi, error } = await supabase
@@ -46,12 +21,14 @@ function App() {
     }
     getRecipes();
   }, []);
+
   return (
     <>
       <Header/>
+      <SearchBar search={search} setSearch={setSearch}/>
       <main className="main">
         <AuthorList/>
-        <RecipeList recipes={recipes}/>
+        <RecipeList recipes={recipes} search={search}/>
       </main>
       <Footer/>
     </>
@@ -68,6 +45,21 @@ function Header(){
       Compilation of various "30Hari 30Resepi Berbuka" series
     </h5>
   </header>
+  );
+}
+
+function SearchBar({search, setSearch}){
+  return(
+    <div className="search-container">
+      <input  
+      type="text" 
+      className="search-input" 
+      placeholder="Search for recipe.." 
+      value={search}
+      onChange= {(e)=>setSearch(e.target.value)}>
+      </input>
+    </div>
+    
   );
 }
 
@@ -88,12 +80,14 @@ function AuthorList(){
   );
 }
 
-function RecipeList({recipes}){
+function RecipeList({recipes, search}){
   return(
     <>
       <section>
         <ul className="recipes-container">
-          {recipes.map((recipe) => (
+          {recipes.filter((recipe) => {
+            return search.toLowerCase() === "" ? recipe : recipe.title.toLowerCase().includes(search);
+          }).map((recipe) => (
             <li className="recipes" key={recipe.id}>
               <a href={recipe.source} target="blank">
                 <article className="article">

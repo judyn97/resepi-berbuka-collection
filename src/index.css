@@ -63,6 +63,22 @@ ul{
   margin: 30px;
 }
 
+.header h1{
+  margin: 0;
+}
+
+.search-input{
+  width: 300px;
+  border-radius: 14px;
+  border: 1px solid #f9f9f9;
+  padding: 12px 14px;
+  margin: 20px 0px;
+}
+
+.search-container{
+  text-align: center;
+}
+
 .footer{
   text-align: center;
   margin: 20px;
@@ -72,6 +88,7 @@ ul{
   list-style: none;
   display: flex;
   margin: 10px;
+  padding-left: 20px;
 }
 
 .main {
@@ -115,6 +132,8 @@ ul{
   width: 208px;
   height: 275px;
   border-radius: 16px;
+  mask-image: linear-gradient(to top, rgba(0,0,0,0) -35%,rgba(0,0,0,0.65) 40%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) -35%,rgba(0,0,0,0.65) 40%);
 }
 
 .image-header-text {
@@ -127,11 +146,11 @@ ul{
   margin: auto;
   padding-left: 5px;
   padding-right: 5px;
-  
+  padding-bottom: 7px;
 }
 
 .image-para-text{
-   font-size: 12px;
+   font-size: 13px;
   color: white;
   text-align: start;
   position: absolute;
@@ -140,9 +159,20 @@ ul{
   margin: auto;
   padding-left: 5px;
   padding-right: 5px;
+  padding-bottom: 3px;
 }
 
 .year-text{
-  font-size: 13px;
+  padding: 1px 2px;
+  margin-left: 4px;
+  font-size: 12px;
   font-weight: bold;
+  background-color: white;
+  opacity: 80%;
+  color: #1a1a1a;
+  border-radius: 8px;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
 }
