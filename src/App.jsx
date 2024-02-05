@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import supabase from './supabase';
 
 const CATEGORIES = [
   { name: "Khairul Aming", color: "#75282b" },
@@ -34,12 +35,23 @@ const testData = [
 ];
 
 function App() {
+  const [recipes, setRecipes] = useState([]);
+
+  useEffect(function() {
+    async function getRecipes(){
+      let { data: resepi, error } = await supabase
+      .from('resepi')
+      .select('*');
+      setRecipes(resepi);
+    }
+    getRecipes();
+  }, []);
   return (
     <>
       <Header/>
       <main className="main">
         <AuthorList/>
-        <RecipeList/>
+        <RecipeList recipes={recipes}/>
       </main>
       <Footer/>
     </>
@@ -65,7 +77,7 @@ function AuthorList(){
     <aside>
       <ul>
         {CATEGORIES.map((cat) => (
-          <li className="category">
+          <li className="category" key={cat.name}>
             <button style={{backgroundColor: cat.color}}>{cat.name}</button>
             </li>
         )
@@ -76,19 +88,22 @@ function AuthorList(){
   );
 }
 
-function RecipeList(){
-  const recipes = testData;
+function RecipeList({recipes}){
   return(
     <>
       <section>
         <ul className="recipes-container">
           {recipes.map((recipe) => (
-            <li className="recipes">
+            <li className="recipes" key={recipe.id}>
               <a href={recipe.source} target="blank">
-                <img src={recipe.thumbnail}/>
+                <article className="article">
+                  <img src={recipe.thumbnail} className="image"/>
+                  <h3 className="image-header-text">{recipe.title}</h3>
+                  <p className="image-para-text">{recipe.author} <span className="year-text">{recipe.year}</span> </p> 
+                </article>
+                
               </a>
-              <h3>{recipe.title}</h3>
-              <p>{recipe.author} <span>{recipe.year}</span> </p>     
+                
             </li>
           )
           )}

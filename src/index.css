@@ -60,10 +60,12 @@ ul{
 }
 .header{
   text-align: center;
+  margin: 30px;
 }
 
 .footer{
   text-align: center;
+  margin: 20px;
 }
 
 .category{
@@ -79,10 +81,8 @@ ul{
 }
 
 .recipes{
-  background-color: #44403c;
-  padding: 16px 24px;
+  padding: 6px 4px;
   border-radius: 16px;
-  margin-bottom: 20px;
 
   display: flex;
   align-items: center;
@@ -90,7 +90,59 @@ ul{
 }
 
 .recipes-container{
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
+}
+
+.article {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.article:hover{
+  transform: scale(110%);
+  -webkit-transform: scale(110%);
+  -moz-transform: scale(110%);
+  -ms-transform: scale(110%);
+  -o-transform: scale(110%);
+}
+
+.image {
+  object-fit: cover;
+  width: 208px;
+  height: 275px;
+  border-radius: 16px;
+}
+
+.image-header-text {
+  font-size: 16px;
+  color: white;
+  text-align: start;
+  position: absolute;
+  bottom: 27px;
+  height: fit-content;
+  margin: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+  
+}
+
+.image-para-text{
+   font-size: 12px;
+  color: white;
+  text-align: start;
+  position: absolute;
+  bottom: 10px;
+  height: fit-content;
+  margin: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.year-text{
+  font-size: 13px;
+  font-weight: bold;
 }
