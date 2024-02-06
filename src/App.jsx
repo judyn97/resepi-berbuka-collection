@@ -1,34 +1,43 @@
 import { useEffect, useState } from 'react'
 import supabase from './supabase';
 
-const CATEGORIES = [
+const AUTHOR = [
   { name: "Khairul Aming", color: "#75282b" },
-  { name: "Hamdan", color: "#c85947" },
-  { name: "Hazwan Cooks", color: "#ffc88f" },
+  { name: "hamdanmubarak", color: "#c85947" },
+  { name: "hazwancooks", color: "#ffc88f" },
 ];
 
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentAuthor, setCurrentAuthor] = useState("all");
 
-  //ToDo: Add Loading.. page during first load
   useEffect(function() {
     async function getRecipes(){
-      let { data: resepi, error } = await supabase
-      .from('resepi')
-      .select('*');
-      setRecipes(resepi);
+      setIsLoading(true);
+      let query = supabase.from('resepi').select('*');
+
+      if(currentAuthor !== "all")
+        query = query.eq("author", currentAuthor);
+
+      const { data: resepi, error } = await query;
+
+      if(!error) setRecipes(resepi);
+      else alert("There was a problem retrieving website data");
+      setIsLoading(false);
     }
     getRecipes();
-  }, []);
+  }, [currentAuthor]);
 
   return (
     <>
       <Header/>
       <SearchBar search={search} setSearch={setSearch}/>
       <main className="main">
-        <AuthorList/>
-        <RecipeList recipes={recipes} search={search}/>
+        <AuthorList setCurrentAuthor={setCurrentAuthor}/>
+        {isLoading ? <Loader/>:<RecipeList recipes={recipes} search={search}/>}
+        
       </main>
       <Footer/>
     </>
@@ -63,14 +72,19 @@ function SearchBar({search, setSearch}){
   );
 }
 
-function AuthorList(){
+function AuthorList({setCurrentAuthor}){
   return(
   <>
     <aside>
       <ul>
-        {CATEGORIES.map((cat) => (
+        <li className="category">
+          <button onClick={()=>setCurrentAuthor("all")}>
+            All
+          </button>
+        </li>
+        {AUTHOR.map((cat) => (
           <li className="category" key={cat.name}>
-            <button style={{backgroundColor: cat.color}}>{cat.name}</button>
+            <button style={{backgroundColor: cat.color}} onClick={()=>setCurrentAuthor(cat.name)}>{cat.name}</button>
             </li>
         )
         )}
@@ -105,6 +119,10 @@ function RecipeList({recipes, search}){
       </section>
     </>
   );
+}
+
+function Loader(){
+  return <h2 className='loading-text'> Loading...</h2>
 }
 
 function Footer(){

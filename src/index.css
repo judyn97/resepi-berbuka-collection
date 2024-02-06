@@ -20,7 +20,7 @@ h1 {
 
 button {
   width: 230px;
-  border-radius: 8px;
+  border-radius: 80px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
   font-size: 1em;
@@ -29,6 +29,10 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  -webkit-border-radius: 80px;
+  -moz-border-radius: 80px;
+  -ms-border-radius: 80px;
+  -o-border-radius: 80px;
 }
 button:hover {
   border-color: #646cff;
@@ -95,6 +99,13 @@ ul{
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: 48px;
+}
+
+.loading-text{
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 80px;
 }
 
 .recipes{
