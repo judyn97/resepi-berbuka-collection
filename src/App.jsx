@@ -4,7 +4,7 @@ import supabase from './supabase';
 const AUTHOR = [
   { name: "Khairul Aming", color: "#75282b" },
   { name: "hamdanmubarak", color: "#c85947" },
-  { name: "hazwancooks", color: "#ffc88f" },
+  { name: "hazwancooks", color: "#5585b5" },
 ];
 
 function App() {
@@ -31,7 +31,7 @@ function App() {
   }, [currentAuthor]);
 
   return (
-    <>
+    <div className='App'>
       <Header/>
       <SearchBar search={search} setSearch={setSearch}/>
       <main className="main">
@@ -40,7 +40,7 @@ function App() {
         
       </main>
       <Footer/>
-    </>
+    </div>
   )
 }
 
