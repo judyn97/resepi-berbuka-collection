@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import supabase from './supabase';
 
-const AUTHOR = [
-  { name: "Khairul Aming", color: "#75282b" },
-  { name: "hamdanmubarak", color: "#c85947" },
-  { name: "hazwancooks", color: "#5585b5" },
-];
-
 function App() {
   const [recipes, setRecipes] = useState([]);
+  const [authors, setAuthors] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentAuthor, setCurrentAuthor] = useState("all");
@@ -17,14 +12,19 @@ function App() {
     async function getRecipes(){
       setIsLoading(true);
       let query = supabase.from('resepi').select('*');
+      let authorQuery = supabase.from('author').select('*').order('id');
 
       if(currentAuthor !== "all")
         query = query.eq("author", currentAuthor);
 
       const { data: resepi, error } = await query;
+      const { data: author, error2 } = await authorQuery;
 
       if(!error) setRecipes(resepi);
       else alert("There was a problem retrieving website data");
+
+      if(!error2) setAuthors(author);
+      else alert("There was a problem retrieving data");
       setIsLoading(false);
     }
     getRecipes();
@@ -35,8 +35,8 @@ function App() {
       <Header/>
       <SearchBar search={search} setSearch={setSearch}/>
       <main className="main">
-        <AuthorList setCurrentAuthor={setCurrentAuthor}/>
-        {isLoading ? <Loader/>:<RecipeList recipes={recipes} search={search}/>}
+      
+        {isLoading ? <><div></div><Loader/></>:<><AuthorList authors={authors} setCurrentAuthor={setCurrentAuthor}/><RecipeList recipes={recipes} search={search}/></>}
         
       </main>
       <Footer/>
@@ -72,7 +72,7 @@ function SearchBar({search, setSearch}){
   );
 }
 
-function AuthorList({setCurrentAuthor}){
+function AuthorList({authors, setCurrentAuthor}){
   return(
   <>
     <aside>
@@ -82,9 +82,9 @@ function AuthorList({setCurrentAuthor}){
             All
           </button>
         </li>
-        {AUTHOR.map((cat) => (
-          <li className="category" key={cat.name}>
-            <button style={{backgroundColor: cat.color}} onClick={()=>setCurrentAuthor(cat.name)}>{cat.name}</button>
+        {authors.map((cat) => (
+          <li className="category" key={cat.author}>
+            <button style={{backgroundColor: cat.color}} onClick={()=>setCurrentAuthor(cat.author)}>{cat.author}</button>
             </li>
         )
         )}
@@ -100,14 +100,14 @@ function RecipeList({recipes, search}){
       <section>
         <ul className="recipes-container">
           {recipes.filter((recipe) => {
-            return search.toLowerCase() === "" ? recipe : recipe.title.toLowerCase().includes(search);
+            return search.toLowerCase() === "" ? recipe : recipe.video_title.toLowerCase().includes(search);
           }).map((recipe) => (
             <li className="recipes" key={recipe.id}>
-              <a href={recipe.source} target="blank">
+              <a href={recipe.post_link} target="blank">
                 <article className="article">
-                  <img src={recipe.thumbnail} className="image"/>
-                  <h3 className="image-header-text">{recipe.title}</h3>
-                  <p className="image-para-text">{recipe.author} <span className="year-text">{recipe.year}</span> </p> 
+                  <img src={recipe.thumbnail_url} className="image"/>
+                  <h3 className="image-header-text">{recipe.video_title}</h3>
+                  <p className="image-para-text">{recipe.author} <span className="year-text">{recipe.year_posted}</span> </p> 
                 </article>
                 
               </a>
