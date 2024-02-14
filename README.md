@@ -5,6 +5,8 @@ This project compiles the "30 hari 30 resepi" during the Ramadhan season from va
 
 Feel free to use the source code to create your own compilation based on your own data.
 
+Visit: https://resepi-berbuka-collection.netlify.app/
+
 
 ## Run Locally
 
