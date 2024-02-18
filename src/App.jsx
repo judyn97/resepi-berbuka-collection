@@ -11,8 +11,8 @@ function App() {
   useEffect(function() {
     async function getRecipes(){
       setIsLoading(true);
-      let query = supabase.from('resepi').select('*');
-      let authorQuery = supabase.from('author').select('*').order('id');
+      let query = supabase.from('resepi').select('*').order('id',{ascending: true});
+      let authorQuery = supabase.from('author').select('*').order('id',{ascending: true});
 
       if(currentAuthor !== "all")
         query = query.eq("author", currentAuthor);
@@ -65,7 +65,7 @@ function SearchBar({search, setSearch}){
       className="search-input" 
       placeholder="Search for recipe.." 
       value={search}
-      onChange= {(e)=>setSearch(e.target.value)}>
+      onChange= {(e)=>setSearch(e.target.value.toLowerCase())}>
       </input>
     </div>
     
