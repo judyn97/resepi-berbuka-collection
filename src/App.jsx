@@ -5,6 +5,7 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [authors, setAuthors] = useState([]);
   const [search, setSearch] = useState("");
+  const [filteredList, setFilteredList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentAuthor, setCurrentAuthor] = useState("all");
 
@@ -30,13 +31,21 @@ function App() {
     getRecipes();
   }, [currentAuthor]);
 
+
+  useEffect(() => {
+    const test = recipes.filter((recipe) => {
+      return search.toLowerCase() === "" ? recipe : recipe.video_title.toLowerCase().includes(search);
+    });
+    setFilteredList(test);
+  }, [recipes, search]);
+
   return (
     <div className='App'>
       <Header/>
-      <SearchBar search={search} setSearch={setSearch}/>
+      <SearchBar search={search} setSearch={setSearch} filteredList={filteredList} recipes={recipes}/>
       <main className="main">
       
-        {isLoading ? <><div></div><Loader/></>:<><AuthorList authors={authors} setCurrentAuthor={setCurrentAuthor}/><RecipeList recipes={recipes} search={search}/></>}
+        {isLoading ? <><div></div><Loader/></>:<><AuthorList authors={authors} setCurrentAuthor={setCurrentAuthor}/><RecipeList filteredList={filteredList}/></>}
         
       </main>
       <Footer/>
@@ -57,7 +66,7 @@ function Header(){
   );
 }
 
-function SearchBar({search, setSearch}){
+function SearchBar({search, setSearch,filteredList,recipes}){
   return(
     <div className="search-container">
       <input  
@@ -67,6 +76,7 @@ function SearchBar({search, setSearch}){
       value={search}
       onChange= {(e)=>setSearch(e.target.value.toLowerCase())}>
       </input>
+      <span>{filteredList.length} of {recipes.length} recipes displayed.</span>
     </div>
     
   );
@@ -94,14 +104,12 @@ function AuthorList({authors, setCurrentAuthor}){
   );
 }
 
-function RecipeList({recipes, search}){
+function RecipeList({filteredList}){
   return(
     <>
       <section>
         <ul className="recipes-container">
-          {recipes.filter((recipe) => {
-            return search.toLowerCase() === "" ? recipe : recipe.video_title.toLowerCase().includes(search);
-          }).map((recipe) => (
+          {filteredList.map((recipe) => (
             <li className="recipes" key={recipe.id}>
               <a href={recipe.post_link} target="blank">
                 <article className="article">
@@ -109,9 +117,7 @@ function RecipeList({recipes, search}){
                   <h3 className="image-header-text">{recipe.video_title}</h3>
                   <p className="image-para-text">{recipe.author} <span className="year-text">{recipe.year_posted}</span> </p> 
                 </article>
-                
-              </a>
-                
+              </a>          
             </li>
           )
           )}
